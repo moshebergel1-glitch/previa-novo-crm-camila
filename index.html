@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova cara do CRM Camila — prévia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf8f4;
+  --surface:#ffffff;
+  --surface-2:#f4f1ea;
+  --ink:#1e2422;
+  --ink-2:#5c6662;
+  --ink-3:#98a19d;
+  --line:#e7e3da;
+  --brand:#0d5c53;
+  --brand-deep:#0a463f;
+  --brand-soft:#e3efec;
+  --sage:#8fb3a5;
+  --amber:#b7791f;
+  --amber-soft:#fbf0dc;
+  --red:#b3402e;
+  --red-soft:#fae7e2;
+  --shadow:0 1px 2px rgba(30,36,34,.05),0 8px 24px rgba(30,36,34,.06);
+  --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:#d8d3c8;border-radius:8px}
+
+.app{display:flex;height:100dvh}
+
+/* ---------- Sidebar ---------- */
+.sidebar{width:236px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column}
+.brand{padding:20px 18px 16px;border-bottom:1px solid var(--line)}
+.brand .clinic{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.brand .name{font-size:17px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
+.brand .name em{font-style:normal;color:var(--brand)}
+.nav{flex:1;overflow-y:auto;padding:12px 10px}
+.nav-group{margin-bottom:14px}
+.nav-group-title{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;padding:0 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border-radius:10px;color:var(--ink-2);font-weight:500;font-size:13.5px;text-align:left;transition:background .12s,color .12s}
+.nav-item svg{width:17px;height:17px;flex-shrink:0;opacity:.75}
+.nav-item:hover{background:var(--surface-2);color:var(--ink)}
+.nav-item.active{background:var(--brand);color:#fff}
+.nav-item.active svg{opacity:1}
+.nav-item .badge{margin-left:auto;background:var(--amber-soft);color:var(--amber);font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px}
+.nav-item.active .badge{background:rgba(255,255,255,.2);color:#fff}
+.sidebar-user{padding:12px 14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.sidebar-user .who{min-width:0}
+.sidebar-user .who b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-user .who span{font-size:11.5px;color:var(--ink-3)}
+
+/* ---------- Main ---------- */
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{height:58px;flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 24px}
+.topbar h1{font-size:16px;font-weight:700;letter-spacing:-.01em}
+.topbar .crumb{font-size:12.5px;color:var(--ink-3)}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2)}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:#2f9e6e}
+.chip.camila-on{border-color:#bfe3d2;background:var(--brand-soft);color:var(--brand-deep)}
+.btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;padding:8px 14px;border-radius:10px;background:var(--brand);color:#fff;transition:filter .12s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+.icon-btn{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);background:var(--surface);position:relative}
+.icon-btn svg{width:17px;height:17px}
+.icon-btn .n{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:10px;font-weight:700;min-width:16px;height:16px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+
+.content{flex:1;overflow-y:auto;padding:24px}
+.view{display:none;max-width:1120px;margin:0 auto}
+.view.active{display:block}
+
+/* ---------- Dashboard ---------- */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow)}
+.kpi .label{font-size:12px;color:var(--ink-2);font-weight:500}
+.kpi .value{font-size:26px;font-weight:800;letter-spacing:-.03em;margin-top:4px}
+.kpi .delta{font-size:12px;font-weight:600;margin-top:4px}
+.kpi .delta.up{color:#2f9e6e}
+.kpi .delta.down{color:var(--red)}
+.grid-2{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 0}
+.card-head h2{font-size:14px;font-weight:700}
+.card-head a{font-size:12px;color:var(--brand);font-weight:600;text-decoration:none}
+.card-body{padding:12px 18px 16px}
+
+.stage{margin-bottom:14px}
+.stage-top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px}
+.stage-top b{font-weight:600}
+.stage-top span{color:var(--ink-3)}
+.bar{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--sage)}
+.bar i.hot{background:var(--brand)}
+
+.follow-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}
+.follow-item:last-child{border-bottom:none}
+.follow-item .avatar{width:34px;height:34px;font-size:12px}
+.follow-item .info{min-width:0;flex:1}
+.follow-item .info b{font-size:13px;display:block}
+.follow-item .info span{font-size:12px;color:var(--ink-2);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.tag.hoje{background:var(--red-soft);color:var(--red)}
+.tag.amanha{background:var(--amber-soft);color:var(--amber)}
+.tag.ok{background:var(--brand-soft);color:var(--brand-deep)}
+.tag.blue{background:#e2ecf7;color:#2d5a8a}
+.tag.gray{background:var(--surface-2);color:var(--ink-2)}
+.follow-item{cursor:pointer;border-radius:10px;padding:10px 8px;margin:0 -8px}
+.follow-item:hover{background:var(--surface-2)}
+
+/* ---------- Pessoas ---------- */
+.toolbar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.search{flex:1;display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:9px 13px}
+.search svg{width:16px;height:16px;color:var(--ink-3)}
+.search input{border:none;outline:none;background:none;font:inherit;flex:1;color:var(--ink)}
+.seg{display:flex;background:var(--surface-2);border-radius:11px;padding:3px}
+.seg button{font-size:12.5px;font-weight:600;padding:6px 13px;border-radius:8px;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.person-row{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 16px;margin-bottom:9px;transition:box-shadow .12s,border-color .12s;cursor:pointer}
+.person-row:hover{border-color:var(--sage);box-shadow:var(--shadow)}
+.person-row.sel{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.person-row .info{min-width:0;flex:1}
+.person-row .info b{font-size:14px}
+.person-row .info span{display:block;font-size:12.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.person-row .meta{text-align:right;font-size:12px;color:var(--ink-3)}
+.src{font-size:11px;font-weight:600;color:var(--ink-3);background:var(--surface-2);padding:3px 8px;border-radius:999px}
+
+/* ---------- Chat ---------- */
+.chat-wrap{display:grid;grid-template-columns:1fr 320px;gap:14px;align-items:start}
+.chat{display:flex;flex-direction:column;height:calc(100dvh - 58px - 48px)}
+.chat-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+.chat-head b{font-size:14px;white-space:nowrap}
+.chat-head span{font-size:12px;color:var(--ink-3);display:block}
+.mode-toggle{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border-radius:999px;padding:4px}
+.mode-toggle button{font-size:12px;font-weight:700;padding:6px 13px;border-radius:999px;color:var(--ink-2)}
+.mode-toggle button.on-h{background:var(--ink);color:#fff}
+.mode-toggle button.on-c{background:var(--brand);color:#fff}
+.msgs{flex:1;overflow-y:auto;padding:20px 18px;background:var(--surface-2);display:flex;flex-direction:column;gap:10px}
+.msg{max-width:72%;padding:9px 13px;border-radius:14px;font-size:13.5px;line-height:1.45}
+.msg.in{background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:4px;align-self:flex-start;box-shadow:var(--shadow)}
+.msg.out{background:#d9fdd3;border-bottom-right-radius:4px;align-self:flex-end}
+.msg .time{display:block;font-size:10.5px;color:var(--ink-3);margin-top:4px;text-align:right}
+.msg.ai{border:1px solid #bfe3d2}
+.msg.ai .who{font-size:10.5px;font-weight:800;color:var(--brand);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:3px}
+.composer{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:flex-end}
+.composer textarea{flex:1;resize:none;border:1px solid var(--line);border-radius:12px;padding:10px 13px;font:inherit;font-size:13.5px;outline:none;background:var(--surface)}
+.composer textarea:focus{border-color:var(--sage)}
+.profile-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.profile-card .pc-head{padding:18px;text-align:center;border-bottom:1px solid var(--line)}
+.profile-card .pc-head .avatar{width:56px;height:56px;font-size:20px;margin:0 auto 10px}
+.profile-card .pc-head b{font-size:15px}
+.profile-card .pc-head span{display:block;font-size:12px;color:var(--ink-3)}
+.pc-row{display:flex;justify-content:space-between;padding:10px 18px;font-size:12.5px;border-bottom:1px solid var(--line)}
+.pc-row:last-child{border-bottom:none}
+.pc-row span{color:var(--ink-2)}
+.pc-row b{font-weight:600;text-align:right}
+
+.note{background:var(--amber-soft);border:1px solid #ecd9b4;border-radius:12px;padding:12px 16px;font-size:12.5px;color:#7a5310;margin-bottom:16px}
+.note b{display:block;margin-bottom:2px}
+.preview-banner{background:linear-gradient(90deg,var(--brand-deep),var(--brand));color:#fff;border-radius:12px;padding:12px 18px;font-size:13px;margin-bottom:20px;display:flex;gap:10px;align-items:center}
+.preview-banner b{font-weight:700}
+
+/* ---------- Lista de conversas (estilo WhatsApp) ---------- */
+.chat-wrap{display:grid;grid-template-columns:300px 1fr 320px;gap:0;align-items:stretch;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+.convo-list{border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.convo-search{margin:12px;display:flex;align-items:center;gap:9px;background:var(--surface-2);border-radius:10px;padding:8px 11px}
+.convo-search svg{width:15px;height:15px;color:var(--ink-3)}
+.convo-search input{border:none;outline:none;background:none;font:inherit;font-size:13px;flex:1}
+.convo-filters{display:flex;gap:6px;padding:0 12px 10px;flex-wrap:wrap}
+.fchip{font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:999px;border:1px solid var(--line);color:var(--ink-2);background:var(--surface)}
+.fchip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.convo-items{flex:1;overflow-y:auto;border-top:1px solid var(--line)}
+.convo{display:flex;gap:11px;padding:11px 12px;border-bottom:1px solid var(--line);cursor:pointer;position:relative;transition:background .12s}
+.convo:hover{background:var(--surface-2)}
+.convo.sel{background:var(--brand-soft)}
+.convo .avatar{width:40px;height:40px;font-size:14px;flex-shrink:0}
+.convo .c-info{min-width:0;flex:1}
+.convo .c-top{display:flex;align-items:baseline;gap:6px}
+.convo .c-top b{font-size:13.5px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.convo .c-top time{font-size:10.5px;color:var(--ink-3);flex-shrink:0}
+.convo .c-prev{font-size:12px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.convo .c-tags{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;align-items:center}
+.bolinha{width:10px;height:10px;border-radius:50%;background:#2f9e6e;flex-shrink:0;box-shadow:0 0 0 3px rgba(47,158,110,.2)}
+.c-src{font-size:9.5px;font-weight:700;letter-spacing:.04em;color:var(--ink-3);background:var(--surface-2);border:1px solid var(--line);padding:1px 6px;border-radius:6px}
+
+/* Resposta rápida */
+.qr-pop{position:absolute;bottom:64px;left:16px;right:16px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 40px rgba(30,36,34,.18);z-index:20;overflow:hidden}
+.qr-pop .qr-head{padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.qr-head button{font-size:11.5px;font-weight:600;color:var(--brand)}
+.qr-item{padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--line)}
+.qr-item:last-child{border-bottom:none}
+.qr-item:hover{background:var(--surface-2)}
+.qr-item b{font-size:12.5px;color:var(--brand);display:block}
+.qr-item span{font-size:12px;color:var(--ink-2);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.composer-wrap{position:relative}
+.hidden{display:none!important}
+
+@media(max-width:980px){
+  .sidebar{display:none}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .grid-2,.chat-wrap{grid-template-columns:1fr}
+  .chat{height:70dvh}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <p class="clinic">Clínica Moshé Bergel</p>
+      <p class="name">CRM <em>Camila</em></p>
+    </div>
+    <nav class="nav" id="nav">
+      <div class="nav-group">
+        <p class="nav-group-title">Operação</p>
+        <button class="nav-item active" data-view="painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Painel</button>
+        <button class="nav-item" data-view="pessoas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><circle cx="17.5" cy="9" r="2.5"/><path d="M16 14.7c2.8.2 4.8 1.9 5.5 4.8"/></svg>Pessoas</button>
+        <button class="nav-item" data-view="funil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/></svg>Fases do funil</button>
+        <button class="nav-item" data-view="agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Agenda</button>
+        <button class="nav-item" data-view="followups"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg>Follow-ups<span class="badge">5</span></button>
+        <button class="nav-item" data-view="tarefas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6h12M9 12h12M9 18h12"/><path d="M4 5.5l1 1 2-2M4 11.5l1 1 2-2M4 17.5l1 1 2-2"/></svg>Tarefas</button>
+        <button class="nav-item" data-view="tratamentos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M3 12h18" opacity="0"/><path d="M8 3h8v6a4 4 0 0 1-8 0V3z"/><path d="M12 13v8"/></svg>Tratamentos</button>
+      </div>
+      <div class="nav-group">
+        <p class="nav-group-title">Gestão</p>
+        <button class="nav-item" data-view="financeiro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>Financeiro</button>
+        <button class="nav-item" data-view="relatorios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Relatórios</button>
+        <button class="nav-item" data-view="origens"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18" opacity=".4"/></svg>Origens</button>
+      </div>
+      <div class="nav-group">
+        <p class="nav-group-title">Camila</p>
+        <button class="nav-item" data-view="camila"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a7 7 0 0 1 7 7v1a7 7 0 0 1-7 7H9l-4 3v-4.5A7 7 0 0 1 5 11v-1a7 7 0 0 1 7-7z"/><path d="M9.5 10.5h.01M14.5 10.5h.01"/></svg>Camila</button>
+        <button class="nav-item" data-view="regras"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>Regras da Camila</button>
+      </div>
+      <div class="nav-group">
+        <p class="nav-group-title">Sistema</p>
+        <button class="nav-item" data-view="config"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12a7 7 0 0 0 .1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6a7 7 0 0 0 .1-1.2z"/></svg>Configurações</button>
+        <button class="nav-item" data-view="integracoes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>Integrações</button>
+      </div>
+    </nav>
+    <div class="sidebar-user">
+      <div class="avatar">M</div>
+      <div class="who"><b>Moshé Bergel</b><span>Administrador</span></div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="page-title">Painel</h1>
+        <span class="crumb" id="page-crumb">Visão geral de hoje</span>
+      </div>
+      <div class="topbar-right">
+        <span class="chip camila-on"><span class="dot"></span>Camila ativa</span>
+        <button class="icon-btn" title="Notificações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg><span class="n">3</span></button>
+        <button class="btn">+ Nova pessoa</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="preview-banner">
+        <b>Prévia do novo design</b> — isto é um protótipo para aprovação. Nenhuma alteração foi feita no CRM real.
+      </div>
+
+      <!-- ===== PAINEL ===== -->
+      <section class="view active" id="view-painel">
+        <div class="kpis">
+          <div class="kpi"><p class="label">Novos leads (7 dias)</p><p class="value">23</p><p class="delta up">▲ 18% vs. semana anterior</p></div>
+          <div class="kpi"><p class="label">Conversas ativas</p><p class="value">9</p><p class="delta up">▲ 4 com a Camila agora</p></div>
+          <div class="kpi"><p class="label">Avaliações agendadas</p><p class="value">6</p><p class="delta up">▲ 2 nesta semana</p></div>
+          <div class="kpi"><p class="label">Follow-ups pendentes</p><p class="value">5</p><p class="delta down">▼ 3 vencem hoje</p></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h2>Leads por fase do funil</h2><a href="#" onclick="go('funil');return false;">ver funil →</a></div>
+            <div class="card-body">
+              <div class="stage"><div class="stage-top"><b>Novo contato</b><span>12 leads</span></div><div class="bar"><i class="hot" style="width:92%"></i></div></div>
+              <div class="stage"><div class="stage-top"><b>Em conversa com a Camila</b><span>8 leads</span></div><div class="bar"><i class="hot" style="width:62%"></i></div></div>
+              <div class="stage"><div class="stage-top"><b>Avaliação agendada</b><span>6 leads</span></div><div class="bar"><i style="width:46%"></i></div></div>
+              <div class="stage"><div class="stage-top"><b>Em tratamento</b><span>14 pacientes</span></div><div class="bar"><i style="width:78%"></i></div></div>
+              <div class="stage"><div class="stage-top"><b>Alta / Concluído</b><span>31</span></div><div class="bar"><i style="width:30%"></i></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>Follow-ups de hoje</h2><a href="#" onclick="go('followups');return false;">ver todos →</a></div>
+            <div class="card-body">
+              <div class="follow-item"><div class="avatar" style="background:#8a5a2b">M</div><div class="info"><b>Marina Duarte</b><span>mandar lembrete da avaliação de amanhã</span></div><span class="tag hoje">HOJE</span></div>
+              <div class="follow-item"><div class="avatar" style="background:#3d5a80">R</div><div class="info"><b>Ricardo Alves</b><span>perguntar se recebeu o link de pagamento</span></div><span class="tag hoje">HOJE</span></div>
+              <div class="follow-item"><div class="avatar" style="background:#6a4c93">P</div><div class="info"><b>Paula Freitas</b><span>confirmar interesse no atendimento online</span></div><span class="tag amanha">AMANHÃ</span></div>
+              <div class="follow-item"><div class="avatar" style="background:#2f6f4f">C</div><div class="info"><b>Clara Nogueira</b><span>enviar disponibilidade de horários</span></div><span class="tag amanha">AMANHÃ</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <div class="card-head"><h2>Leads em atendimento agora</h2><a href="#" onclick="go('pessoas');return false;">ver todas as pessoas →</a></div>
+          <div class="card-body" id="active-leads"></div>
+        </div>
+      </section>
+
+      <!-- ===== PESSOAS ===== -->
+      <section class="view" id="view-pessoas">
+        <div class="toolbar">
+          <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input placeholder="Buscar por nome ou telefone..."></div>
+          <div class="seg"><button class="on">Todas</button><button>Novas</button><button>Em tratamento</button></div>
+        </div>
+        <div id="people-list"></div>
+      </section>
+
+      <!-- ===== CHAT / CAMILA ===== -->
+      <section class="view" id="view-camila">
+        <div class="chat-wrap" style="height:calc(100dvh - 58px - 110px)">
+
+          <!-- Lista de conversas -->
+          <div class="convo-list">
+            <div class="convo-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input placeholder="Pesquisar conversa..."></div>
+            <div class="convo-filters">
+              <button class="fchip on">Tudo</button>
+              <button class="fchip">Não respondidas</button>
+              <button class="fchip">Follow-up</button>
+              <button class="fchip">Camila</button>
+              <button class="fchip">Humano</button>
+            </div>
+            <div class="convo-items" id="convo-items"></div>
+          </div>
+
+          <!-- Conversa -->
+          <div class="card chat" style="border:none;border-radius:0;box-shadow:none">
+            <div class="chat-head">
+              <div class="avatar" style="background:#8a5a2b">M</div>
+              <div><b>Marina Duarte</b><span>WhatsApp · (11) 98765-4321</span></div>
+              <span class="tag blue" style="margin-left:10px">AVALIAÇÃO 14/11 · 15H</span>
+              <div class="mode-toggle" id="mode-toggle">
+                <button class="on-c" data-mode="camila">Camila</button>
+                <button data-mode="humano">Humano</button>
+              </div>
+            </div>
+            <div class="msgs" id="msgs">
+              <div class="msg in ai"><span class="who">Camila</span>Oi, Marina! 😊 Imagino como deve ser difícil sentir essa ansiedade e o medo de sair sozinha, especialmente quando isso começa a limitar sua liberdade.<span class="time">09:42</span></div>
+              <div class="msg out">Oi! Sim, faz uns meses que isso anda me atrapalhando bastante<span class="time">09:44</span></div>
+              <div class="msg in ai"><span class="who">Camila</span>O Moshé trabalha justamente com ansiedade e medos, usando hipnose e outras técnicas. A primeira etapa é uma avaliação de ~1h30, custa R$250 e é dedicada a ouvir sua história — sem compromisso, viu? Me conta, Marina, você prefere conhecer o atendimento online ou presencial?<span class="time">09:45</span></div>
+              <div class="msg out">Presencial seria melhor pra mim. Quanto custa o tratamento completo?<span class="time">09:51</span></div>
+              <div class="msg in ai"><span class="who">Camila</span>Perfeito, Marina! 😊 Para a avaliação, o valor é R$250 antecipado, por Pix ou cartão, da forma que ficar mais fácil. Sobre o acompanhamento completo, deixa eu confirmar os detalhes com a equipe de agendamentos pra te passar tudo certinho. Qual das duas opções de pagamento você prefere?<span class="time">09:52</span></div>
+            </div>
+            <div class="composer-wrap">
+              <div class="qr-pop hidden" id="qr-pop">
+                <div class="qr-head">Respostas rápidas <button onclick="alert('Na versão real, abre a tela de criar/editar respostas rápidas')">+ gerenciar</button></div>
+                <div id="qr-list"></div>
+              </div>
+              <div class="composer">
+                <textarea rows="1" id="ta" placeholder="Digite / para resposta rápida..."></textarea>
+                <button class="btn">Enviar</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ficha do lead -->
+          <div style="border-left:1px solid var(--line);padding:14px;overflow-y:auto">
+            <div class="profile-card">
+              <div class="pc-head">
+                <div class="avatar" style="background:#8a5a2b">M</div>
+                <b>Marina Duarte</b>
+                <span>Instagram · chegou hoje</span>
+              </div>
+              <div class="pc-row"><span>Fase do funil</span><b>Novo contato</b></div>
+              <div class="pc-row"><span>Etiqueta</span><b><span class="tag blue">AVALIAÇÃO 14/11 · 15H</span></b></div>
+              <div class="pc-row"><span>Origem</span><b>Campanha Instagram</b></div>
+              <div class="pc-row"><span>Avaliação</span><b>14/11 · 15h00 · Presencial</b></div>
+              <div class="pc-row"><span>Atendimento</span><b id="pc-mode">Camila 😊</b></div>
+              <div class="pc-row"><span>Canal</span><b>WhatsApp Web</b></div>
+            </div>
+            <div class="note" style="margin-top:14px;margin-bottom:0">
+              <b>Novidades nesta tela</b>
+              Etiqueta de estágio visível na conversa · bolinha verde em quem não foi respondido · conversas do WhatsApp Web e da API oficial juntas na mesma lista (veja o selo no canal) · resposta rápida com "/".
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== FOLLOW-UPS ===== -->
+      <section class="view" id="view-followups">
+        <div class="note"><b>Como funcionará</b>Você escolhe o tempo de cada follow-up por lead. Os dois primeiros retomam o contato gentilmente; o último, pensado para quem desistiu, direciona ao Instagram — a pessoa sai do funil, mas continua sendo nutrida pelos conteúdos da clínica.</div>
+        <div class="grid-2" style="grid-template-columns:repeat(3,1fr)">
+          <div class="card">
+            <div class="card-head"><h2>Follow-up 24h</h2><span class="tag amanha">1º RETOMADA</span></div>
+            <div class="card-body">
+              <p style="font-size:13px;color:var(--ink-2);background:var(--surface-2);border-radius:10px;padding:12px;line-height:1.6">Oi, Marina! 😊 Ficou alguma dúvida sobre a avaliação? Estou por aqui se quiser conversar.</p>
+              <p style="font-size:12px;color:var(--ink-3);margin-top:10px">Enviado automaticamente 24h após a última mensagem do lead.</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>Follow-up 48h</h2><span class="tag amanha">2º RETOMADA</span></div>
+            <div class="card-body">
+              <p style="font-size:13px;color:var(--ink-2);background:var(--surface-2);border-radius:10px;padding:12px;line-height:1.6">Marina, separei um horário essa semana caso queira começar. A avaliação é sem compromisso — só pra você conhecer o método. Prefere online ou presencial? 😊</p>
+              <p style="font-size:12px;color:var(--ink-3);margin-top:10px">Enviado 48h após, apenas se a conversa seguir sem resposta.</p>
+            </div>
+          </div>
+          <div class="card" style="border-color:#c9b8e8">
+            <div class="card-head"><h2>Último follow-up</h2><span class="tag" style="background:#efe7fb;color:#6a4c93">DIRECIONA AO INSTAGRAM</span></div>
+            <div class="card-body">
+              <p style="font-size:13px;color:var(--ink-2);background:#f6f2fc;border-radius:10px;padding:12px;line-height:1.6">Sem problemas, Marina! 😊 Se um dia quiser retomar, é só chamar. Enquanto isso, nosso Instagram <b>@moshebergel</b> tem conteúdos sobre ansiedade e hipnose que podem te ajudar. Será muito bem-vinda por lá! 🌿</p>
+              <p style="font-size:12px;color:var(--ink-3);margin-top:10px">Respeita a desistência, sem insistir — e nutre o lead fora do funil.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== FUNIL ===== -->
+      <section class="view" id="view-funil">
+        <div class="note"><b>Prévia parcial</b>Esta página manteria o quadro de fases, agora com colunas mais limpas e arrastar-e-soltar visível.</div>
+        <div class="card"><div class="card-body" style="padding:24px 18px">
+          <div class="stage"><div class="stage-top"><b>Novo contato</b><span>12</span></div><div class="bar"><i class="hot" style="width:92%"></i></div></div>
+          <div class="stage"><div class="stage-top"><b>Em conversa</b><span>8</span></div><div class="bar"><i class="hot" style="width:62%"></i></div></div>
+          <div class="stage"><div class="stage-top"><b>Avaliação agendada</b><span>6</span></div><div class="bar"><i style="width:46%"></i></div></div>
+          <div class="stage"><div class="stage-top"><b>Em tratamento</b><span>14</span></div><div class="bar"><i style="width:78%"></i></div></div>
+        </div></div>
+      </section>
+
+      <section class="view" id="view-generic"><div class="note"><b>Prévia parcial</b>Esta página entraria no pacote de redesign completo — o mesmo padrão visual de Painel, Pessoas e Camila.</div></section>
+    </main>
+  </div>
+</div>
+
+<script>
+const titles = {
+  painel:['Painel','Visão geral de hoje'], pessoas:['Pessoas','Leads e pacientes'],
+  camila:['Camila','Conversas do WhatsApp'], funil:['Fases do funil','Onde cada lead está'],
+  agenda:['Agenda','Compromissos da clínica'], followups:['Follow-ups','Lembretes de retomada'],
+  tarefas:['Tarefas','A fazer'], tratamentos:['Tratamentos','Pacotes em andamento'],
+  financeiro:['Financeiro','Mensalidades e pagamentos'], relatorios:['Relatórios','Desempenho'],
+  origens:['Origens','De onde vêm os leads'], regras:['Regras da Camila','Como a Camila deve responder'],
+  config:['Configurações','Preferências do CRM'], integracoes:['Integrações','WhatsApp e outras conexões']
+};
+const generic = ['agenda','tarefas','tratamentos','financeiro','relatorios','origens','regras','config','integracoes'];
+
+function go(view){
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active', b.dataset.view===view));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const target = generic.includes(view) ? 'view-generic' : 'view-'+view;
+  document.getElementById(target).classList.add('active');
+  const t = titles[view]||titles.painel;
+  document.getElementById('page-title').textContent = t[0];
+  document.getElementById('page-crumb').textContent = t[1];
+}
+document.getElementById('nav').addEventListener('click',e=>{
+  const b = e.target.closest('.nav-item'); if(b) go(b.dataset.view);
+});
+
+/* Pessoas — dados fictícios */
+const people = [
+  {n:'Marina Duarte', t:'(11) 98765-4321', s:'Instagram', stage:'Novo contato', when:'hoje, 09:42', color:'#8a5a2b', tag:'FOLLOW-UP HOJE', tagc:'hoje'},
+  {n:'Ricardo Alves', t:'(11) 97654-3210', s:'Indicação', stage:'Em conversa', when:'ontem, 18:10', color:'#3d5a80'},
+  {n:'Paula Freitas', t:'(21) 96543-2109', s:'Google', stage:'Em conversa', when:'ontem, 11:03', color:'#6a4c93', tag:'AMANHÃ', tagc:'amanha'},
+  {n:'Eduardo Lima', t:'(11) 95432-1098', s:'Instagram', stage:'Avaliação agendada', when:'segunda, 14:22', color:'#2f6f4f', tag:'PAGO ✓', tagc:'ok'},
+  {n:'Clara Nogueira', t:'(31) 94321-0987', s:'Instagram', stage:'Em tratamento', when:'ontem, 16:45', color:'#7d4f50'},
+  {n:'Joana Martins', t:'(11) 93210-9876', s:'Campanha', stage:'Desistiu', when:'12/11, 10:12', color:'#5c6662'}
+];
+document.getElementById('people-list').innerHTML = people.map((p,i)=>`
+  <div class="person-row" onclick="go('camila')">
+    <div class="avatar" style="background:${p.color}">${p.n[0]}</div>
+    <div class="info"><b>${p.n}</b><span>${p.stage} · ${p.t}</span></div>
+    <span class="src">${p.s}</span>
+    ${p.tag?`<span class="tag ${p.tagc}">${p.tag}</span>`:''}
+    <div class="meta">${p.when}</div>
+  </div>`).join('');
+
+/* Leads ativos no painel */
+const active = [
+  {n:'Marina Duarte', s:'Ansiedade e medo de sair sozinha', color:'#8a5a2b', tag:'AVALIAÇÃO 14/11 · 15H', tagc:'blue'},
+  {n:'Ricardo Alves', s:'Perguntou sobre sessões para insônia', color:'#3d5a80', tag:'FOLLOW-UP HOJE', tagc:'hoje'},
+  {n:'Paula Freitas', s:'Comparando atendimento online', color:'#6a4c93', tag:'EM CONVERSA', tagc:'ok'},
+  {n:'Eduardo Lima', s:'Confirmou avaliação presencial', color:'#2f6f4f', tag:'PAGO ✓ AGENDADO', tagc:'blue'},
+  {n:'Clara Nogueira', s:'Em tratamento — sessão semanal', color:'#7d4f50', tag:'EM TRATAMENTO', tagc:'gray'},
+  {n:'Joana Martins', s:'Preferiu não prosseguir', color:'#5c6662', tag:'DESISTIU', tagc:'gray'}
+];
+document.getElementById('active-leads').innerHTML = active.map(p=>`
+  <div class="follow-item" onclick="go('camila')">
+    <div class="avatar" style="background:${p.color}">${p.n[0]}</div>
+    <div class="info"><b>${p.n}</b><span>${p.s}</span></div>
+    <span class="tag ${p.tagc}">${p.tag}</span>
+  </div>`).join('');
+
+/* Lista de conversas — WhatsApp Web + API oficial juntas */
+const convos = [
+  {n:'Marina Duarte', p:'Presencial seria melhor pra mim...', time:'09:51', color:'#8a5a2b', tag:'AVALIAÇÃO 14/11', tagc:'blue', unread:true, src:'API'},
+  {n:'Ricardo Alves', p:'Consegue me mandar o link de pagamento?', time:'09:12', color:'#3d5a80', tag:'FOLLOW-UP 24H', tagc:'hoje', unread:true, src:'Web'},
+  {n:'Paula Freitas', p:'Vou pensar melhor, obrigada!', time:'08:47', color:'#6a4c93', tag:'FOLLOW-UP 48H', tagc:'amanha', unread:true, src:'API'},
+  {n:'Eduardo Lima', p:'Pix feito, acabei de enviar o comprovante ✓', time:'Ontem', color:'#2f6f4f', tag:'PAGO ✓', tagc:'blue', unread:false, src:'API'},
+  {n:'Clara Nogueira', p:'A sessão de terça está confirmada?', time:'Ontem', color:'#7d4f50', tag:'EM TRATAMENTO', tagc:'gray', unread:false, src:'Web'},
+  {n:'Joana Martins', p:'Obrigada, mas vou desistir por enquanto', time:'12/11', color:'#5c6662', tag:'DESISTIU', tagc:'gray', unread:false, src:'Web'}
+];
+function renderConvos(filter){
+  const list = convos.filter(c=>{
+    if(filter==='nao-respondidas') return c.unread;
+    if(filter==='follow-up') return c.tag.includes('FOLLOW-UP');
+    return true;
+  });
+  document.getElementById('convo-items').innerHTML = list.map(c=>`
+    <div class="convo ${c.n==='Marina Duarte'?'sel':''}" onclick="alert('Na prévia, a conversa é sempre a da Marina. Na versão real, abre a conversa certa.')">
+      <div class="avatar" style="background:${c.color}">${c.n[0]}</div>
+      <div class="c-info">
+        <div class="c-top"><b>${c.n}</b>${c.unread?'<span class="bolinha"></span>':''}<time>${c.time}</time></div>
+        <div class="c-prev">${c.p}</div>
+        <div class="c-tags"><span class="tag ${c.tagc}">${c.tag}</span><span class="c-src">${c.src}</span></div>
+      </div>
+    </div>`).join('');
+}
+renderConvos('tudo');
+document.querySelectorAll('.fchip').forEach(ch=>ch.addEventListener('click',()=>{
+  document.querySelectorAll('.fchip').forEach(x=>x.classList.remove('on'));
+  ch.classList.add('on'); renderConvos(ch.textContent.trim().toLowerCase().includes('respondid')?'nao-respondidas':ch.textContent.trim().toLowerCase().includes('follow')?'follow-up':'tudo');
+}));
+
+/* Respostas rápidas com "/" */
+const quickReplies = [
+  {k:'/obrigado', t:'Agradecemos por utilizar nossos serviços! Esperamos trabalhar com você novamente. Qualquer coisa, estamos por aqui. 😊'},
+  {k:'/avaliacao', t:'A avaliação tem duração de ~1h30, custa R$250 e é dedicada a ouvir sua história + uma experiência prática em hipnose. Pode ser online ou presencial, sem compromisso. Qual das opções você prefere?'},
+  {k:'/pagamento', t:'O pagamento da avaliação é antecipado, por Pix ou cartão, da forma que ficar mais fácil. Qual das duas opções prefere?'},
+  {k:'/online', t:'O atendimento online tem o mesmo cuidado e a mesma eficácia — a hipnoterapia não exige contato físico, e atendemos várias cidades e países! 😊'}
+];
+const ta = document.getElementById('ta'), qrPop = document.getElementById('qr-pop');
+ta.addEventListener('input',()=>{
+  const v = ta.value;
+  if(v.startsWith('/')){
+    const q = v.slice(1).toLowerCase();
+    const hits = quickReplies.filter(r=>r.k.slice(1).startsWith(q));
+    document.getElementById('qr-list').innerHTML = hits.length ? hits.map((r,i)=>`<div class="qr-item" onclick="pickQr(${quickReplies.indexOf(r)})"><b>${r.k}</b><span>${r.t}</span></div>`).join('') : '<div class="qr-item"><span>Nenhuma resposta rápida encontrada</span></div>';
+    qrPop.classList.remove('hidden');
+  } else qrPop.classList.add('hidden');
+});
+function pickQr(i){ ta.value = quickReplies[i].t; qrPop.classList.add('hidden'); ta.focus(); }
+
+/* Seletor Humano/Camila */
+document.getElementById('mode-toggle').addEventListener('click',e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  document.querySelectorAll('#mode-toggle button').forEach(x=>x.className='');
+  b.className = b.dataset.mode==='camila' ? 'on-c' : 'on-h';
+  document.getElementById('pc-mode').textContent = b.dataset.mode==='camila' ? 'Camila 😊' : 'Humano';
+});
+if(location.hash.length>1) go(location.hash.slice(1));
+</script>
+</body>
+</html>
